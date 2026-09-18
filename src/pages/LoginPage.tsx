@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { Shield, LogIn } from 'lucide-react';
-import { auth, googleProvider, ADMIN_EMAIL, signInWithPopup, signOut } from './firebase';
-import { useAuth } from './AuthContext';
+import { auth, googleProvider, ADMIN_EMAIL, signInWithPopup, signOut } from '../firebase';
+import { useAuth } from '../AuthContext';
 
 const LoginPage: React.FC = () => {
   const { isAdmin, loading } = useAuth();
