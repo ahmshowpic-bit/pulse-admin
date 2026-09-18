@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 
-/* Ù†Ù…Ø· Ù…Ø´ØªØ±Ùƒ: Ø­Ù‚Ù„ Ù…Ø¹ØªÙ… ØªÙ…Ø§Ù…Ø§Ù‹ (Ø¨Ø¯ÙˆÙ† backdrop-blur) */
+/* نمط مشترك: حقل معتم تماماً (بدون backdrop-blur) */
 export const FIELD_BASE =
   'w-full bg-[#08080d] border border-white/10 rounded-2xl outline-none focus:border-cyan-500/60 transition-colors';
 
@@ -14,8 +14,8 @@ interface LocalFieldProps {
   ariaLabel?: string;
 }
 
-/* Ø­Ù‚Ù„ Ù†ØµÙŠ Ù…Ø¹Ø²ÙˆÙ„: state Ù…Ø­Ù„ÙŠ + commit Ø¹Ù†Ø¯ onBlur Ø£Ùˆ Ø¨Ø¹Ø¯ debounce.
-   Ø§Ù„ÙƒØªØ§Ø¨Ø© Ù„Ø§ ØªØ³Ø¨Ø¨ Ø£ÙŠ re-render Ø®Ø§Ø±Ø¬ Ù‡Ø°Ø§ Ø§Ù„Ø­Ù‚Ù„. */
+/* حقل نصي معزول: state محلي + commit عند onBlur أو بعد debounce.
+   الكتابة لا تسبب أي re-render خارج هذا الحقل. */
 const LocalField: React.FC<LocalFieldProps> = React.memo(({
   initialValue, onCommit, placeholder, className = '', rows, debounceMs = 500, ariaLabel
 }) => {
@@ -25,7 +25,7 @@ const LocalField: React.FC<LocalFieldProps> = React.memo(({
   const commitRef = useRef(onCommit);
   commitRef.current = onCommit;
 
-  // Ù„Ùˆ Ø§Ù„Ø£Ø¨ ØºÙŠÙ‘Ø± Ø§Ù„Ù‚ÙŠÙ…Ø© Ù…Ù† Ø§Ù„Ø®Ø§Ø±Ø¬ (ØªØ­Ù…ÙŠÙ„ Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø¬Ø¯ÙŠØ¯Ø© Ù…Ø«Ù„Ø§Ù‹)
+  // لو الأب غيّر القيمة من الخارج (تحميل إعدادات جديدة مثلاً)
   useEffect(() => {
     if (initialValue !== latest.current) {
       latest.current = initialValue;
