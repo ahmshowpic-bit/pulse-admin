@@ -15,8 +15,8 @@ interface MusicDraft {
 
 const EMPTY_DRAFT: MusicDraft = { title: '', url: '', img: '', folder: 'new', newFolder: '' };
 
-/* ØµÙØ­Ø© Ù…Ø³ØªÙ‚Ù„Ø©: ØªØ´ØªØ±Ùƒ ÙÙŠ music + defaultSongId Ù…Ù† Ø§Ù„Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª.
-   Ù…Ø³ÙˆØ¯Ø© Ø§Ù„Ù†Ù…ÙˆØ°Ø¬ ÙÙŠ ref ÙÙ„Ø§ ØªØ¶ÙŠØ¹ Ø¹Ù†Ø¯ Ø§Ù„ØªÙ†Ù‚Ù„ Ø¨ÙŠÙ† Ø§Ù„ØµÙØ­Ø§Øª. */
+/* صفحة مستقلة: تشترك في music + defaultSongId من الإعدادات.
+   مسودة النموذج في ref فلا تضيع عند التنقل بين الصفحات. */
 const MusicPage: React.FC = () => {
   const [songs, setSongs] = useState<Song[]>([]);
   const [defaultSongId, setDefaultSongId] = useState<string>('');
@@ -46,7 +46,7 @@ const MusicPage: React.FC = () => {
     return () => { unsubSongs(); unsubSettings(); };
   }, []);
 
-  // Ø£Ø³Ù…Ø§Ø¡ Ø§Ù„Ù…Ø¬Ù„Ø¯Ø§Øª Ù…Ø´ØªÙ‚Ø© Ù…Ù† Ø§Ù„Ø£ØºØ§Ù†ÙŠ Ù†ÙØ³Ù‡Ø§
+  // أسماء المجلدات مشتقة من الأغاني نفسها
   const folderNames = useMemo(() => {
     const set = new Set(songs.map(s => s.folder));
     return Array.from(set);
@@ -64,7 +64,7 @@ const MusicPage: React.FC = () => {
     const d = draftRef.current;
     const target = d.folder === 'new' ? d.newFolder.trim() : d.folder;
     if (!target || !d.title.trim() || !d.url.trim()) {
-      alert('ÙŠØ±Ø¬Ù‰ Ø¥ÙƒÙ…Ø§Ù„ Ø§Ù„Ø¨ÙŠØ§Ù†Ø§Øª');
+      alert('يرجى إكمال البيانات');
       return;
     }
     setBusy(true);
@@ -77,10 +77,10 @@ const MusicPage: React.FC = () => {
       .then(() => {
         draftRef.current = { title: '', url: '', img: '', folder: target, newFolder: '' };
         setFolder(target);
-        setResetKey(k => k + 1); // ÙŠÙØ¹ÙŠØ¯ Ø¨Ù†Ø§Ø¡ Ø§Ù„Ø­Ù‚ÙˆÙ„ Ù„ØªÙØ±ÙŠØºÙ‡Ø§
-        alert('ØªÙ…Øª Ø§Ù„Ø¥Ø¶Ø§ÙØ© Ø¨Ù†Ø¬Ø§Ø­!');
+        setResetKey(k => k + 1); // يُعيد بناء الحقول لتفريغها
+        alert('تمت الإضافة بنجاح!');
       })
-      .catch(err => alert('Ø®Ø·Ø£ ÙÙŠ Ø§Ù„ØµÙ„Ø§Ø­ÙŠØ§Øª: ' + err.message))
+      .catch(err => alert('خطأ في الصلاحيات: ' + err.message))
       .finally(() => setBusy(false));
   }, []);
 
@@ -89,42 +89,42 @@ const MusicPage: React.FC = () => {
   }, []);
 
   const deleteSong = useCallback((id: string) => {
-    if (!confirm('Ù‡Ù„ Ø£Ù†Øª Ù…ØªØ£ÙƒØ¯ Ù…Ù† Ø§Ù„Ø­Ø°ÙØŸ')) return;
+    if (!confirm('هل أنت متأكد من الحذف؟')) return;
     remove(ref(db, `music/${id}`)).catch(e => console.error(e));
   }, []);
 
   const formKey = `${folder}-${resetKey}`;
 
   if (!loaded) {
-    return <div className="text-white/30 text-xl font-bold text-center py-20">Ø¬Ø§Ø±Ù ØªØ­Ù…ÙŠÙ„ Ø§Ù„Ø£ØºØ§Ù†ÙŠâ€¦</div>;
+    return <div className="text-white/30 text-xl font-bold text-center py-20">جارِ تحميل الأغاني…</div>;
   }
 
   return (
     <div className="max-w-4xl">
-      <h3 className="text-3xl font-black mb-10">Ø¥Ø¯Ø§Ø±Ø© Ø§Ù„Ù…Ø­ØªÙˆÙ‰ Ø§Ù„ØµÙˆØªÙŠ</h3>
+      <h3 className="text-3xl font-black mb-10">إدارة المحتوى الصوتي</h3>
 
-      {/* Ù†Ù…ÙˆØ°Ø¬ Ø§Ù„Ø¥Ø¶Ø§ÙØ© */}
+      {/* نموذج الإضافة */}
       <div className="bg-white/5 border border-white/10 p-8 rounded-[3rem] mb-12 space-y-6">
         <div className="grid md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <FieldLabel>Ø§Ø®ØªÙŠØ§Ø± Ø§Ù„Ù…Ø¬Ù„Ø¯</FieldLabel>
+            <FieldLabel>اختيار المجلد</FieldLabel>
             <select
               value={folder}
               onChange={handleFolderChange}
               className={`${FIELD_BASE} p-4 text-lg font-bold`}
             >
-              <option value="new">++ Ø¥Ù†Ø´Ø§Ø¡ Ù…Ø¬Ù„Ø¯ Ø¬Ø¯ÙŠØ¯ ++</option>
+              <option value="new">++ إنشاء مجلد جديد ++</option>
               {folderNames.map(f => <option key={f} value={f}>{f}</option>)}
             </select>
           </div>
           {folder === 'new' && (
             <div className="space-y-2">
-              <FieldLabel>Ø§Ø³Ù… Ø§Ù„Ù…Ø¬Ù„Ø¯ Ø§Ù„Ø¬Ø¯ÙŠØ¯</FieldLabel>
+              <FieldLabel>اسم المجلد الجديد</FieldLabel>
               <LocalField
                 key={`nf-${formKey}`}
                 initialValue={draftRef.current.newFolder}
                 onCommit={setField('newFolder')}
-                placeholder="Ø£Ø¯Ø®Ù„ Ø§Ø³Ù…Ø§Ù‹ Ù„Ù„Ù…Ø¬Ù„Ø¯"
+                placeholder="أدخل اسماً للمجلد"
                 className="p-4 text-lg"
               />
             </div>
@@ -133,17 +133,17 @@ const MusicPage: React.FC = () => {
 
         <div className="grid md:grid-cols-2 gap-6">
           <div className="space-y-2">
-            <FieldLabel>Ø§Ø³Ù… Ø§Ù„Ø£ØºÙ†ÙŠØ©</FieldLabel>
+            <FieldLabel>اسم الأغنية</FieldLabel>
             <LocalField
               key={`t-${formKey}`}
               initialValue={draftRef.current.title}
               onCommit={setField('title')}
-              placeholder="Ù…Ø«Ø§Ù„: Ù„Ø­Ù† Ø§Ù„Ø®Ù„ÙˆØ¯"
+              placeholder="مثال: لحن الخلود"
               className="p-4 text-lg"
             />
           </div>
           <div className="space-y-2">
-            <FieldLabel>Ø±Ø§Ø¨Ø· Ù…Ù„Ù MP3</FieldLabel>
+            <FieldLabel>رابط ملف MP3</FieldLabel>
             <LocalField
               key={`u-${formKey}`}
               initialValue={draftRef.current.url}
@@ -155,7 +155,7 @@ const MusicPage: React.FC = () => {
         </div>
 
         <div className="space-y-2">
-          <FieldLabel>Ø±Ø§Ø¨Ø· ØµÙˆØ±Ø© Ø§Ù„ØºÙ„Ø§Ù</FieldLabel>
+          <FieldLabel>رابط صورة الغلاف</FieldLabel>
           <LocalField
             key={`i-${formKey}`}
             initialValue={draftRef.current.img}
@@ -170,14 +170,14 @@ const MusicPage: React.FC = () => {
           disabled={busy}
           className="w-full py-5 bg-cyan-600 rounded-[2rem] font-black text-xl shadow-lg shadow-cyan-600/20 hover:bg-cyan-500 active:scale-95 transition-all disabled:opacity-40"
         >
-          {busy ? 'Ø¬Ø§Ø±ÙŠ Ø§Ù„Ø¥Ø¶Ø§ÙØ©...' : 'Ø¥Ø¶Ø§ÙØ© Ø§Ù„Ù…Ù„Ù Ø§Ù„Ø¢Ù†'}
+          {busy ? 'جاري الإضافة...' : 'إضافة الملف الآن'}
         </button>
       </div>
 
-      {/* Ù‚Ø§Ø¦Ù…Ø© Ø§Ù„Ø£ØºØ§Ù†ÙŠ */}
+      {/* قائمة الأغاني */}
       <div className="space-y-3">
         {songs.length === 0 && (
-          <div className="text-white/10 text-center py-20 text-xl font-bold">Ù„Ø§ ØªÙˆØ¬Ø¯ Ø£ØºØ§Ù†ÙŠ Ù…Ø¶Ø§ÙØ© Ø¨Ø¹Ø¯</div>
+          <div className="text-white/10 text-center py-20 text-xl font-bold">لا توجد أغاني مضافة بعد</div>
         )}
         {songs.map(s => (
           <div key={s.id} className="flex items-center gap-6 p-4 bg-white/5 rounded-[1.5rem] border border-white/5 hover:border-white/10 transition-colors">
@@ -190,7 +190,7 @@ const MusicPage: React.FC = () => {
               <button
                 onClick={() => setDefault(s.id)}
                 className={`w-12 h-12 rounded-full transition-colors flex items-center justify-center ${defaultSongId === s.id ? 'bg-yellow-500 text-black' : 'bg-white/5 text-white/20 hover:text-white/60'}`}
-                title="ØªØ¹ÙŠÙŠÙ† ÙƒØ£ØºÙ†ÙŠØ© Ø§ÙØªØ±Ø§Ø¶ÙŠØ©"
+                title="تعيين كأغنية افتراضية"
               >
                 <Heart size={20} fill={defaultSongId === s.id ? 'currentColor' : 'none'} />
               </button>
