@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './AuthContext';
 import ProtectedRoute from './ProtectedRoute';
 import AdminLayout from './layouts/AdminLayout';
-import LoginPage from './LoginPage';
+import LoginPage from './pages/LoginPage';
 import InboxPage from './pages/InboxPage';
 import MusicPage from './pages/MusicPage';
 import PagesPage from './pages/PagesPage';
