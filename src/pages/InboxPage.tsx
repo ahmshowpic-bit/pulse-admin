@@ -26,20 +26,20 @@ const InboxPage: React.FC = () => {
   }, []);
 
   if (!loaded) {
-    return <div className="text-white/30 text-xl font-bold text-center py-20">Ø¬Ø§Ø±Ù ØªØ­Ù…ÙŠÙ„ Ø§Ù„Ø±Ø³Ø§Ø¦Ù„â€¦</div>;
+    return <div className="text-white/30 text-xl font-bold text-center py-20">جارِ تحميل الرسائل…</div>;
   }
 
   return (
     <div className="space-y-6 max-w-4xl">
       <h3 className="text-3xl font-black mb-10 flex items-center justify-between">
-        ØµÙ†Ø¯ÙˆÙ‚ Ø§Ù„ÙˆØ§Ø±Ø¯
+        صندوق الوارد
         <span className="bg-cyan-500/20 text-cyan-400 px-4 py-1 rounded-full text-sm font-black">
-          {messages.length} Ø±Ø³Ø§Ù„Ø©
+          {messages.length} رسالة
         </span>
       </h3>
 
       {messages.length === 0 && (
-        <div className="text-white/10 text-center py-20 text-xl font-bold">Ù„Ø§ ØªÙˆØ¬Ø¯ Ø±Ø³Ø§Ø¦Ù„ Ø¬Ø¯ÙŠØ¯Ø© Ø­Ø§Ù„ÙŠØ§Ù‹</div>
+        <div className="text-white/10 text-center py-20 text-xl font-bold">لا توجد رسائل جديدة حالياً</div>
       )}
 
       {messages.map(m => (
