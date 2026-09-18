@@ -4,10 +4,10 @@ import { Mail, Music as MusicIcon, Settings, LogOut, Shield } from 'lucide-react
 import { auth, signOut } from '../firebase';
 
 const navItems = [
-  { to: '/inbox', label: 'Ø§Ù„Ø¨Ø±ÙŠØ¯ Ø§Ù„ÙˆØ§Ø±Ø¯', icon: <Mail /> },
-  { to: '/music', label: 'Ø¥Ø¯Ø§Ø±Ø© Ø§Ù„Ø£ØºØ§Ù†ÙŠ', icon: <MusicIcon /> },
-  { to: '/pages', label: 'Ø¨Ù†Ø§Ø¡ Ø§Ù„ØµÙØ­Ø§Øª', icon: <Settings /> },
-  { to: '/settings', label: 'Ø¥Ø¹Ø¯Ø§Ø¯Ø§Øª Ø§Ù„Ù†Ø¸Ø§Ù…', icon: <Settings /> },
+  { to: '/inbox', label: 'البريد الوارد', icon: <Mail /> },
+  { to: '/music', label: 'إدارة الأغاني', icon: <MusicIcon /> },
+  { to: '/pages', label: 'بناء الصفحات', icon: <Settings /> },
+  { to: '/settings', label: 'إعدادات النظام', icon: <Settings /> },
 ];
 
 const AdminLayout: React.FC = () => {
@@ -23,7 +23,7 @@ const AdminLayout: React.FC = () => {
           <div className="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 shrink-0">
             <Shield size={22} />
           </div>
-          <span className="hidden md:block font-black text-lg tracking-tight">Ù„ÙˆØ­Ø© Ø§Ù„ØªØ­ÙƒÙ…</span>
+          <span className="hidden md:block font-black text-lg tracking-tight">لوحة التحكم</span>
         </div>
 
         <nav className="flex-1 flex flex-col gap-2">
@@ -49,7 +49,7 @@ const AdminLayout: React.FC = () => {
           onClick={handleSignOut}
           className="flex items-center gap-4 p-4 text-red-400 hover:bg-red-400/10 rounded-2xl transition-colors font-black"
         >
-          <LogOut size={22} /> <span className="hidden md:inline">ØªØ³Ø¬ÙŠÙ„ Ø§Ù„Ø®Ø±ÙˆØ¬</span>
+          <LogOut size={22} /> <span className="hidden md:inline">تسجيل الخروج</span>
         </button>
       </aside>
 
