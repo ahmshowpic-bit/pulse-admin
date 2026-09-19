@@ -85,7 +85,9 @@ const MusicPage: React.FC = () => {
   }, []);
 
   const setDefault = useCallback((id: string) => {
-    update(ref(db, 'settings'), { defaultSongId: id }).catch(e => console.error(e));
+    update(ref(db, 'settings'), { defaultSongId: id }).catch((e: any) =>
+      alert('فشل تعيين الأغنية الافتراضية: ' + e.message)
+    );
   }, []);
 
   const deleteSong = useCallback((id: string) => {
@@ -188,9 +190,9 @@ const MusicPage: React.FC = () => {
             </div>
             <div className="flex gap-2 shrink-0">
               <button
-                onClick={() => setDefault(s.id)}
+                onClick={() => setDefault(defaultSongId === s.id ? '' : s.id)}
                 className={`w-12 h-12 rounded-full transition-colors flex items-center justify-center ${defaultSongId === s.id ? 'bg-yellow-500 text-black' : 'bg-white/5 text-white/20 hover:text-white/60'}`}
-                title="تعيين كأغنية افتراضية"
+                title={defaultSongId === s.id ? 'الأغنية الافتراضية حاليًا (اضغط لإلغاء التعيين)' : 'تعيين كأغنية افتراضية'}
               >
                 <Heart size={20} fill={defaultSongId === s.id ? 'currentColor' : 'none'} />
               </button>
