@@ -1,10 +1,11 @@
 import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
-import { Mail, Music as MusicIcon, Settings, LogOut, Shield } from 'lucide-react';
+import { Mail, Users, Music as MusicIcon, Settings, LogOut, Shield } from 'lucide-react';
 import { auth, signOut } from '../firebase';
 
 const navItems = [
   { to: '/inbox', label: 'البريد الوارد', icon: <Mail /> },
+  { to: '/diaries', label: 'اليوميات', icon: <Users /> },
   { to: '/music', label: 'إدارة الأغاني', icon: <MusicIcon /> },
   { to: '/pages', label: 'بناء الصفحات', icon: <Settings /> },
   { to: '/settings', label: 'إعدادات النظام', icon: <Settings /> },
