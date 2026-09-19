@@ -39,6 +39,8 @@ interface DiaryEntry {
 const ADMIN_NAME = 'AHMED PULSE';
 const ADMIN_VISITOR_ID = 'ADMIN';
 const MAX_NAME = 20;
+const MAX_POST_LENGTH = 1000;    // نفس حد قواعد Firebase لنص اليومية
+const MAX_COMMENT_LENGTH = 500;  // نفس حد قواعد Firebase لنص التعليق
 const PAGE_STEP = 30;
 
 const today = () => new Date().toLocaleDateString('ar-EG');
@@ -144,6 +146,7 @@ const Composer: React.FC = React.memo(() => {
         value={text}
         onChange={e => setText(e.target.value)}
         rows={4}
+        maxLength={MAX_POST_LENGTH}
         placeholder="اكتب اليومية هنا..."
         aria-label="نص اليومية"
         className={`${FIELD_BASE} p-5 text-lg leading-relaxed resize-none`}
@@ -218,6 +221,7 @@ const CommentsBox: React.FC<CommentsBoxProps> = React.memo(({ postId, comments }
           value={text}
           onChange={e => setText(e.target.value)}
           onKeyDown={e => { if (e.key === 'Enter') send(); }}
+          maxLength={MAX_COMMENT_LENGTH}
           placeholder="اكتب تعليقًا..."
           aria-label="نص التعليق"
           className={`${FIELD_BASE} flex-1 p-4 text-sm`}
