@@ -5,6 +5,7 @@ import ProtectedRoute from './ProtectedRoute';
 import AdminLayout from './layouts/AdminLayout';
 import LoginPage from './pages/LoginPage';
 import InboxPage from './pages/InboxPage';
+import DiariesPage from './pages/DiariesPage';
 import MusicPage from './pages/MusicPage';
 import PagesPage from './pages/PagesPage';
 import SettingsPage from './pages/SettingsPage';
@@ -21,6 +22,7 @@ const App: React.FC = () => {
             <Route element={<AdminLayout />}>
               <Route path="/" element={<Navigate to="/inbox" replace />} />
               <Route path="/inbox" element={<InboxPage />} />
+              <Route path="/diaries" element={<DiariesPage />} />
               <Route path="/music" element={<MusicPage />} />
               <Route path="/pages" element={<PagesPage />} />
               <Route path="/settings" element={<SettingsPage />} />
